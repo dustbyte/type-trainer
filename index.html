@@ -1,0 +1,76 @@
+<head>
+<style>
+.noshow {
+    display: none;
+}
+</style>
+</head>
+<div id="question"><span id="offensive">fire</span> -&gt; <span id="defensive">water + poison</span></div>
+<div id="response" class="noshow"></div>
+<div id="answer" class="noshow"></div>
+<button onClick="answer(this)">4</button>
+<button onClick="answer(this)">2</button>
+<button onClick="answer(this)">1</button>
+<button onClick="answer(this)">0.5</button>
+<button onClick="answer(this)">0.25</button>
+<button onClick="answer(this)">0</button>
+<div id="success" class="noshow">Success!!</div>
+<div id="failure" class="noshow">Fail!</div>
+<button id="next" class="noshow" onclick="reset()">Next</button>
+<script>
+types = ['Normal','Fire','Water','Electric','Grass','Ice','Fighting','Poison','Ground','Flying','Psychic','Bug','Rock','Ghost','Dragon','Dark','Steel','Fairy'],
+matches = [
+    [1,1,1,1,1,1,1,1,1,1,1,1,0.5,0,1,1,0.5,1],
+    [1,0.5,0.5,1,2,2,1,1,1,1,1,2,0.5,1,0.5,1,2,1],
+    [1,2,0.5,1,0.5,1,1,1,2,1,1,1,2,1,0.5,1,1,1],
+    [1,1,2,0.5,0.5,1,1,1,0,2,1,1,1,1,0.5,1,1,1],
+    [1,0.5,2,1,0.5,1,1,0.5,2,0.5,1,0.5,2,1,0.5,1,0.5,1],
+    [1,0.5,0.5,1,2,0.5,1,1,2,2,1,1,1,1,2,1,0.5,1],
+    [2,1,1,1,1,2,1,0.5,1,0.5,0.5,0.5,2,0,1,2,2,0.5],
+    [1,1,1,1,2,1,1,0.5,0.5,1,1,1,0.5,0.5,1,1,0,2],
+    [1,2,1,2,0.5,1,1,2,1,0,1,0.5,2,1,1,1,2,1],
+    [1,1,1,0.5,2,1,2,1,1,1,1,2,0.5,1,1,1,0.5,1],
+    [1,1,1,1,1,1,2,2,1,1,0.5,1,1,1,1,0,0.5,1],
+    [1,0.5,1,1,2,1,0.5,0.5,1,0.5,2,1,1,0.5,1,2,0.5,0.5],
+    [1,2,1,1,1,2,0.5,1,0.5,2,1,2,1,1,1,1,0.5,1],
+    [0,1,1,1,1,1,1,1,1,1,2,1,1,2,1,0.5,1,1],
+    [1,1,1,1,1,1,1,1,1,1,1,1,1,1,2,1,0.5,0],
+    [1,1,1,1,1,1,0.5,1,1,1,2,1,1,2,1,0.5,1,0.5],
+    [1,0.5,0.5,0.5,1,2,1,1,1,1,1,1,2,1,1,1,0.5,2],
+    [1,0.5,1,1,1,1,2,0.5,1,1,1,1,1,1,2,2,0.5,1],
+];
+
+function reset() {
+    ["success", "failure", "next"].forEach(function(id) {
+        document.getElementById(id).classList.add('noshow');
+    });
+    offensive_type = Math.floor(Math.random() * types.length);
+    document.getElementById("offensive").innerHTML = types[offensive_type]
+    defensive_type = Math.floor(Math.random() * types.length);
+    document.getElementById("defensive").innerHTML = types[defensive_type]
+    response = matches[offensive_type][defensive_type];
+
+    if (Math.floor(Math.random() * 2) == 0) {
+        defensive_type = Math.floor(Math.random() * types.length);
+        document.getElementById("defensive").innerHTML += ' + ' + types[defensive_type]
+        response *= matches[offensive_type][defensive_type];
+    }
+
+    document.getElementById("response").innerHTML = response;
+}
+
+function answer(event) {
+    response = document.getElementById("response").textContent;
+    user_answer = event.textContent;
+    if (response != user_answer) {
+        document.getElementById("failure").classList.remove('noshow');
+        document.getElementById("failure").innerHTML = "Fail! The answer was " + response + "!";
+    } else {
+        document.getElementById("success").classList.remove('noshow');
+    }
+
+    document.getElementById("next").classList.remove("noshow");
+}
+
+window.onload = reset;
+</script>
