@@ -51,9 +51,11 @@ function reset() {
     response = matches[offensive_type][defensive_type];
 
     if (Math.floor(Math.random() * 2) == 0) {
-        defensive_type = Math.floor(Math.random() * types.length);
-        document.getElementById("defensive").innerHTML += ' + ' + types[defensive_type]
-        response *= matches[offensive_type][defensive_type];
+        second_defensive_type = Math.floor(Math.random() * types.length);
+        if (second_defensive_type != defensive_type) {
+            document.getElementById("defensive").innerHTML += ' + ' + types[second_defensive_type]
+            response *= matches[offensive_type][second_defensive_type];
+        }
     }
 
     document.getElementById("response").innerHTML = response;
