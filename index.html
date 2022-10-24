@@ -51,24 +51,24 @@
                 ["success", "failure", "next"].forEach(function(id) {
                     document.getElementById(id).classList.add('noshow');
                 });
-                type_match = [];
-                offensive_type = Math.floor(Math.random() * types.length);
-                type_match.push(offensive_type);
-                document.getElementById("offensive").innerHTML = types[offensive_type]
-                defensive_type = Math.floor(Math.random() * types.length);
-                type_match.push(defensive_type);
-                document.getElementById("defensive").innerHTML = types[defensive_type]
-                response = matches[offensive_type][defensive_type];
 
-                if (Math.floor(Math.random() * 2) == 0) {
-                    second_defensive_type = Math.floor(Math.random() * types.length);
-                    if (second_defensive_type != defensive_type) {
-                        type_match.push(second_defensive_type);
-                        document.getElementById("defensive").innerHTML += ' + ' + types[second_defensive_type]
-                        response *= matches[offensive_type][second_defensive_type];
+                offensive_type = Math.floor(Math.random() * types.length);
+                type_match = [offensive_type];
+                document.getElementById("offensive").innerHTML = types[offensive_type]
+
+                response = 1;
+                document.getElementById("defensive").innerHTML = "";
+                for (i = 0; i < Math.floor(Math.random() * 2) + 1; i++) {
+                    defensive_type = Math.floor(Math.random() * types.length);
+                    type_match.push(defensive_type);
+                    if (i > 0) {
+                    document.getElementById("defensive").innerHTML += ' + ';
                     }
+                    document.getElementById("defensive").innerHTML += types[defensive_type];
+                    response *= matches[offensive_type][defensive_type]
                 }
 
+                console.log(type_match);
                 document.getElementById("response").innerHTML = response;
             }
 
