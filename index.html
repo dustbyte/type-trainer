@@ -25,6 +25,7 @@
             <button type="button" class="btn btn-lg btn-outline-primary" onClick="answer(this)">0</button>
             <div id="success" class="noshow">Success!!</div>
             <div id="failure" class="noshow">Fail!</div>
+            <div id="explain-dual" class="noshow"></div>
             <button id="next" class="noshow btn btn-outline-success btn-lg" onclick="reset()">Next</button>
         </div>
         <script>
@@ -53,7 +54,7 @@
             var type_match;
 
             function reset() {
-                ["success", "failure", "next"].forEach(function(id) {
+                ["success", "failure", "next", "explain-dual"].forEach(function(id) {
                     document.getElementById(id).classList.add('noshow');
                 });
 
@@ -65,10 +66,13 @@
                 document.getElementById("defensive").innerHTML = "";
                 for (i = 0; i < Math.floor(Math.random() * 2) + 1; i++) {
                     defensive_type = Math.floor(Math.random() * types.length);
-                    type_match.push(defensive_type);
                     if (i > 0) {
+                        if (type_match.includes(defensive_type, 1)) {
+                            break;
+                        }
                         document.getElementById("defensive").innerHTML += ' + ';
                     }
+                    type_match.push(defensive_type);
                     document.getElementById("defensive").innerHTML += types[defensive_type];
                     response *= matches[offensive_type][defensive_type]
                 }
@@ -81,19 +85,24 @@
                 response = document.getElementById("response").textContent;
                 user_answer = event.textContent;
                 if (response != user_answer) {
-                    document.getElementById("failure").classList.remove('noshow');
-                    fail = document.getElementById("failure")
-                    fail.innerHTML = "Fail! The answer was " + response + "!";
-                    if (type_match.length == 3) {
-                        offensive_name = types[type_match[0]];
-                        for (i = 1; i < 3; i++) {
-                            defensive_name = types[type_match[i]];
-                            match = matches[type_match[0]][type_match[i]];
-                            fail.innerHTML += '<br />' + offensive_name + ' -&gt; ' + defensive_name + ' = ' + match;
-                        }
-                    }
+                    failure = document.getElementById("failure");
+                    failure.innerHTML = "Fail! The answer was " + response + "!";
+                    failure.classList.remove('noshow');
                 } else {
                     document.getElementById("success").classList.remove('noshow');
+                }
+
+                if (type_match.length == 3) {
+                    offensive_name = types[type_match[0]];
+                    explain_dual = document.getElementById("explain-dual");
+                    explain_dual.innerHTML = '<ul>';
+                    for (i = 1; i < 3; i++) {
+                        defensive_name = types[type_match[i]];
+                        match = matches[type_match[0]][type_match[i]];
+                        explain_dual.innerHTML += '<li>' + offensive_name + ' -&gt; ' + defensive_name + ' = ' + match + '</li>';
+                    }
+                    explain_dual.innerHTML += '</ul>';
+                    explain_dual.classList.remove("noshow");
                 }
 
                 document.getElementById("next").classList.remove("noshow");
